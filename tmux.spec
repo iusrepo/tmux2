@@ -8,8 +8,7 @@ Group:          Applications/System
 # 3 clause BSD licensed.
 License:        ISC and BSD
 URL:            http://sourceforge.net/projects/tmux
-Requires(pre):  /usr/sbin/groupadd
-Requires(preun): /usr/sbin/groupdel
+Requires(pre):  shadow-utils
 Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 # This first patch creates MANDIR in the GNUmakefile.  This has been sent
 # upstream via email but upstream replied and said would not change.
@@ -49,10 +48,7 @@ mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/run/%{name}
 rm -rf %{buildroot}
 
 %pre
-%{_sbindir}/groupadd -r tmux &>/dev/null || :
-
-%postun
-%{_sbindir}/groupdel tmux || :
+getent group tmux >/dev/null || groupadd -r tmux
 
 %files
 %defattr(-,root,root,-)
