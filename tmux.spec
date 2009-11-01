@@ -1,6 +1,6 @@
 Name:           tmux
 Version:        1.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A terminal multiplexer
 
 Group:          Applications/System
@@ -8,10 +8,15 @@ Group:          Applications/System
 # 3 clause BSD licensed.
 License:        ISC and BSD
 URL:            http://sourceforge.net/projects/tmux
+Requires(pre):  /usr/sbin/groupadd
+Requires(preun): /usr/sbin/groupdel
 Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 # This first patch creates MANDIR in the GNUmakefile.  This has been sent
 # upstream via email but upstream replied and said would not change.
-Patch0:         tmux-1.0-fixmanpagedir.patch
+Patch0:         tmux-1.0-02_fix_wrong_location.diff
+Patch1:         tmux-1.0-03_proper_socket_handling.diff
+Patch2:         tmux-1.0-04_dropping_unnecessary_privileges.diff
+Patch3:         tmux-1.0-06_hardening_write_return.diff
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  ncurses-devel
@@ -24,7 +29,10 @@ as GNU Screen.
 
 %prep
 %setup -q
-%patch0 -p1 -b .fixmanpagedir
+%patch0 -p1 -b .location
+%patch1 -p1 -b .sockethandling
+%patch2 -p1 -b .dropprivs
+%patch3 -p1 -b .writehard
 
 %build
 %configure
@@ -32,18 +40,32 @@ make %{?_smp_mflags} LDFLAGS="%{optflags}"
 
 %install
 rm -rf %{buildroot}
-make install PREFIX=%{_prefix} MANDIR=%{_mandir} DESTDIR=%{buildroot} INSTALLBIN="install -p -m 755" INSTALLMAN="install -p -m 644"
+make install DESTDIR=%{buildroot} INSTALLBIN="install -p -m 755" INSTALLMAN="install -p -m 644"
+
+# Create the socket dir
+mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/run/%{name}
 
 %clean
 rm -rf %{buildroot}
 
+%pre
+%{_sbindir}/groupadd -r tmux &>/dev/null || :
+
+%postun
+%{_sbindir}/groupdel tmux || :
+
 %files
 %defattr(-,root,root,-)
 %doc CHANGES FAQ NOTES TODO examples/
-%{_bindir}/tmux
-%{_mandir}/man1/tmux.1.gz
+%attr(2755,root,tmux) %{_bindir}/tmux
+%{_mandir}/man1/tmux.1.*
+%attr(775,root,tmux) %{_localstatedir}/run/tmux
 
 %changelog
+* Sun Nov 01 2009 Sven Lankes <sven@lank.es> 1.0-2
+- Add debian patches
+- Add tmux group for improved socket handling
+
 * Sat Oct 24 2009 Sven Lankes <sven@lank.es> 1.0-1
 - New upstream release
 

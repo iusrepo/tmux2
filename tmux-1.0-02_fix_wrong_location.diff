@@ -1,0 +1,59 @@
+# correct directory /usr/local 
+--- a/GNUmakefile
++++ b/GNUmakefile
+@@ -8,7 +8,7 @@
+ 
+ CC?= gcc
+ CFLAGS+= -DBUILD="\"$(VERSION)\""
+-LDFLAGS+= -L/usr/local/lib
++LDFLAGS+= -L/usr/lib
+ LIBS+=
+ 
+ ifdef FDEBUG
+@@ -30,7 +30,7 @@
+ endif
+ endif
+ 
+-PREFIX?= /usr/local
++PREFIX?= /usr/
+ INSTALLDIR= install -d
+ INSTALLBIN= install -g bin -o root -m 555
+ INSTALLMAN= install -g bin -o root -m 444
+@@ -59,7 +59,7 @@
+ install:	all
+ 		$(INSTALLDIR) $(DESTDIR)$(PREFIX)/bin
+ 		$(INSTALLBIN) tmux $(DESTDIR)$(PREFIX)/bin/tmux
+-		$(INSTALLDIR) $(DESTDIR)$(PREFIX)/man/man1
+-		$(INSTALLMAN) tmux.1 $(DESTDIR)$(PREFIX)/man/man1/tmux.1
++		$(INSTALLDIR) $(DESTDIR)$(PREFIX)share/man/man1
++		$(INSTALLMAN) tmux.1 $(DESTDIR)$(PREFIX)share/man/man1/tmux.1
+ 
+ -include .depend
+--- a/Makefile
++++ b/Makefile
+@@ -9,7 +9,7 @@
+ 
+ CC?= cc
+ CFLAGS+= -DBUILD="\"$(VERSION)\""
+-LDFLAGS+= -L/usr/local/lib
++LDFLAGS+= -L/usr/lib
+ LIBS+=
+ 
+ .ifdef FDEBUG
+@@ -32,7 +32,7 @@
+ .endif
+ .endif
+ 
+-PREFIX?= /usr/local
++PREFIX?= /usr
+ INSTALLDIR= install -d
+ INSTALLBIN= install -g bin -o root -m 555
+ INSTALLMAN= install -g bin -o root -m 444
+@@ -64,5 +64,5 @@
+ install:	all
+ 		${INSTALLDIR} ${DESTDIR}${PREFIX}/bin
+ 		${INSTALLBIN} tmux ${DESTDIR}${PREFIX}/bin/
+-		${INSTALLDIR} ${DESTDIR}${PREFIX}/man/man1
+-		${INSTALLMAN} tmux.1 ${DESTDIR}${PREFIX}/man/man1/
++		${INSTALLDIR} ${DESTDIR}${PREFIX}/share/man/man1
++		${INSTALLMAN} tmux.1 ${DESTDIR}${PREFIX}/share/man/man1/

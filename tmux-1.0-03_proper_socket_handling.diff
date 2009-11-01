@@ -1,0 +1,45 @@
+# setting /usr/bin/tmux with sgid and proper location of socket
+--- a/GNUmakefile
++++ b/GNUmakefile
+@@ -32,7 +32,7 @@
+ 
+ PREFIX?= /usr/
+ INSTALLDIR= install -d
+-INSTALLBIN= install -g bin -o root -m 555
++INSTALLBIN= install -g utmp -o root -m 2755
+ INSTALLMAN= install -g bin -o root -m 444
+ 
+ SRCS= $(shell echo *.c|sed 's|osdep-[a-z0-9]*.c||g')
+--- a/Makefile
++++ b/Makefile
+@@ -34,7 +34,7 @@
+ 
+ PREFIX?= /usr
+ INSTALLDIR= install -d
+-INSTALLBIN= install -g bin -o root -m 555
++INSTALLBIN= install -g utmp -o root -m 2755
+ INSTALLMAN= install -g bin -o root -m 444
+ 
+ SRCS!= echo *.c|sed 's|osdep-[a-z0-9]*.c||g'
+--- a/compat.h
++++ b/compat.h
+@@ -25,7 +25,7 @@
+ 
+ #ifndef HAVE_PATHS_H
+ #define	_PATH_BSHELL	"/bin/sh"
+-#define	_PATH_TMP	"/tmp/"
++#define _PATH_VARRUN    "/var/run/"
+ #define _PATH_DEVNULL	"/dev/null"
+ #define _PATH_TTY	"/dev/tty"
+ #define _PATH_DEV	"/dev/"
+--- a/tmux.c
++++ b/tmux.c
+@@ -239,7 +239,7 @@
+ 	u_int		uid;
+ 
+ 	uid = getuid();
+-	xsnprintf(base, MAXPATHLEN, "%s/tmux-%d", _PATH_TMP, uid);
++	xsnprintf(base, MAXPATHLEN, "%s/%s/%s-%d", _PATH_VARRUN, __progname, __progname, uid);
+ 
+ 	if (mkdir(base, S_IRWXU) != 0 && errno != EEXIST)
+ 		return (NULL);
