@@ -1,40 +1,46 @@
-# setting /usr/bin/tmux with sgid and proper location of socket
+diff --git a/GNUmakefile b/GNUmakefile
+index 5e7b6f3..c11120e 100644
 --- a/GNUmakefile
 +++ b/GNUmakefile
-@@ -32,7 +32,7 @@
- 
- PREFIX?= /usr/
- INSTALLDIR= install -d
--INSTALLBIN= install -g bin -o root -m 555
-+INSTALLBIN= install -g utmp -o root -m 2755
- INSTALLMAN= install -g bin -o root -m 444
- 
- SRCS= $(shell echo *.c|sed 's|osdep-[a-z0-9]*.c||g')
---- a/Makefile
-+++ b/Makefile
-@@ -34,7 +34,7 @@
+@@ -53,7 +53,7 @@ endif
  
  PREFIX?= /usr
  INSTALLDIR= install -d
 -INSTALLBIN= install -g bin -o root -m 555
-+INSTALLBIN= install -g utmp -o root -m 2755
++INSTALLBIN= install -g tmux -o root -m 2755
+ INSTALLMAN= install -g bin -o root -m 444
+ 
+ SRCS= $(shell echo *.c|sed 's|osdep-[a-z0-9]*.c||g')
+diff --git a/Makefile b/Makefile
+index c5b1ece..9cb822a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -49,7 +49,7 @@ CFLAGS+= -Wno-pointer-sign
+ 
+ PREFIX?= /usr
+ INSTALLDIR= install -d
+-INSTALLBIN= install -g bin -o root -m 555
++INSTALLBIN= install -g tmux -o root -m 2755
  INSTALLMAN= install -g bin -o root -m 444
  
  SRCS!= echo *.c|sed 's|osdep-[a-z0-9]*.c||g'
+diff --git a/compat.h b/compat.h
+index 68fde0a..d63e7d3 100644
 --- a/compat.h
 +++ b/compat.h
-@@ -25,7 +25,7 @@
- 
+@@ -26,6 +26,7 @@ typedef uint64_t u_int64_t;
  #ifndef HAVE_PATHS_H
  #define	_PATH_BSHELL	"/bin/sh"
--#define	_PATH_TMP	"/tmp/"
+ #define	_PATH_TMP	"/tmp/"
 +#define _PATH_VARRUN    "/var/run/"
  #define _PATH_DEVNULL	"/dev/null"
  #define _PATH_TTY	"/dev/tty"
  #define _PATH_DEV	"/dev/"
+diff --git a/tmux.c b/tmux.c
+index b590ec1..8c07180 100644
 --- a/tmux.c
 +++ b/tmux.c
-@@ -239,7 +239,7 @@
+@@ -264,7 +264,7 @@ makesockpath(const char *label)
  	u_int		uid;
  
  	uid = getuid();

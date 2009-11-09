@@ -1,6 +1,6 @@
 Name:           tmux
-Version:        1.0
-Release:        2%{?dist}
+Version:        1.1
+Release:        1%{?dist}
 Summary:        A terminal multiplexer
 
 Group:          Applications/System
@@ -58,6 +58,9 @@ getent group tmux >/dev/null || groupadd -r tmux
 %attr(775,root,tmux) %{_localstatedir}/run/tmux
 
 %changelog
+* Mon Nov 09 2009 Sven Lankes <sven@lank.es> 1.1-1
+- New upstream release
+
 * Sun Nov 01 2009 Sven Lankes <sven@lank.es> 1.0-2
 - Add debian patches
 - Add tmux group for improved socket handling
