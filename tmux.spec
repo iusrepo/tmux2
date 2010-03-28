@@ -15,7 +15,9 @@ Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.
 Patch0:         tmux-1.0-02_fix_wrong_location.diff
 Patch1:         tmux-1.0-03_proper_socket_handling.diff
 Patch2:         tmux-1.0-04_dropping_unnecessary_privileges.diff
-#Patch3:         tmux-1.0-06_hardening_write_return.diff
+# 2010-03-28: Submitted upstream:
+# https://sourceforge.net/tracker/?func=detail&aid=2977945&group_id=200378&atid=973264
+Patch3:         tmux-1.2-writehard.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  ncurses-devel
@@ -32,7 +34,7 @@ as GNU Screen.
 %patch0 -p1 -b .location
 %patch1 -p1 -b .sockethandling
 %patch2 -p1 -b .dropprivs
-#%patch3 -p1 -b .writehard
+%patch3 -p1 -b .writehard
 
 %build
 %configure
@@ -61,6 +63,7 @@ getent group tmux >/dev/null || groupadd -r tmux
 %changelog
 * Sun Mar 28 2010 Sven Lankes <sven@lank.es> 1.2-1
 - New upstream release
+- rediff writehard patch
 
 * Mon Nov 09 2009 Sven Lankes <sven@lank.es> 1.1-1
 - New upstream release
