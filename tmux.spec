@@ -1,5 +1,5 @@
 Name:           tmux
-Version:        1.2
+Version:        1.3
 Release:        1%{?dist}
 Summary:        A terminal multiplexer
 
@@ -33,9 +33,9 @@ as GNU Screen.
 
 %prep
 %setup -q
-%patch0 -p1 -b .location
-%patch1 -p1 -b .sockethandling
-%patch2 -p1 -b .dropprivs
+%patch0 -p0 -b .location
+%patch1 -p0 -b .sockethandling
+%patch2 -p0 -b .dropprivs
 %patch3 -p1 -b .writehard
 
 %build
@@ -63,6 +63,9 @@ getent group tmux >/dev/null || groupadd -r tmux
 %attr(775,root,tmux) %{_localstatedir}/run/tmux
 
 %changelog
+* Mon Jul 19 2010 Sven Lankes <sven@lank.es> 1.3-1
+- New upstream release
+
 * Sun Mar 28 2010 Sven Lankes <sven@lank.es> 1.2-1
 - New upstream release
 - rediff writehard patch
