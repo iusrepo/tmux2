@@ -1,6 +1,6 @@
 Name:           tmux
 Version:        1.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A terminal multiplexer
 
 Group:          Applications/System
@@ -63,6 +63,9 @@ getent group tmux >/dev/null || groupadd -r tmux
 %attr(775,root,tmux) %{_localstatedir}/run/tmux
 
 %changelog
+* Fri Aug 06 2010 Filipe Rosset <filiperosset@fedoraproject.org> 1.3-2
+- Rebuild for F-13
+
 * Mon Jul 19 2010 Sven Lankes <sven@lank.es> 1.3-1
 - New upstream release
 
