@@ -1,6 +1,6 @@
 Name:           tmux
 Version:        1.4
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A terminal multiplexer
 
 Group:          Applications/System
@@ -63,6 +63,9 @@ getent group tmux >/dev/null || groupadd -r tmux
 %attr(775,root,tmux) %{_localstatedir}/run/tmux
 
 %changelog
+* Wed Feb 09 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.4-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
+
 * Tue Dec 28 2010 Filipe Rosset <rosset.filipe@gmail.com> 1.4-1
 - New upstream release
 
