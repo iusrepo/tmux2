@@ -1,5 +1,6 @@
---- GNUmakefile.orig	2010-07-19 06:52:17.485212178 +0200
-+++ GNUmakefile	2010-07-19 06:53:20.685214123 +0200
+# correct directory /usr/local 
+--- a/GNUmakefile
++++ b/GNUmakefile
 @@ -23,7 +23,7 @@
  
  CC?= cc
@@ -14,7 +15,7 @@
  endif
  
 -PREFIX?= /usr/local
-+PREFIX?= /usr
++PREFIX?= /usr/
  INSTALL?= install
  INSTALLDIR= $(INSTALL) -d
  INSTALLBIN= $(INSTALL) -m 555
@@ -24,12 +25,12 @@
  		$(INSTALLBIN) tmux $(DESTDIR)$(PREFIX)/bin/tmux
 -		$(INSTALLDIR) $(DESTDIR)$(PREFIX)/man/man1
 -		$(INSTALLMAN) tmux.1 $(DESTDIR)$(PREFIX)/man/man1/tmux.1
-+		$(INSTALLDIR) $(DESTDIR)$(PREFIX)/share/man/man1
-+		$(INSTALLMAN) tmux.1 $(DESTDIR)$(PREFIX)/share/man/man1/tmux.1
++		$(INSTALLDIR) $(DESTDIR)$(PREFIX)share/man/man1
++		$(INSTALLMAN) tmux.1 $(DESTDIR)$(PREFIX)share/man/man1/tmux.1
  
  -include .depend
---- Makefile.orig	2010-07-19 06:53:30.745213504 +0200
-+++ Makefile	2010-07-19 06:54:13.637338721 +0200
+--- a/Makefile
++++ b/Makefile
 @@ -24,7 +24,7 @@
  
  CC?= cc
@@ -44,7 +45,7 @@
  .endif
  
 -PREFIX?= /usr/local
-+PREFIX?= /usr
++PREFIX?= /usr/
  INSTALL?= install
  INSTALLDIR= ${INSTALL} -d
  INSTALLBIN= ${INSTALL} -m 555

@@ -1,6 +1,6 @@
 Name:           tmux
 Version:        1.4
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        A terminal multiplexer
 
 Group:          Applications/System
@@ -33,9 +33,9 @@ as GNU Screen.
 
 %prep
 %setup -q
-%patch0 -p0 -b .location
-%patch1 -p0 -b .sockethandling
-%patch2 -p0 -b .dropprivs
+%patch0 -p1 -b .location
+%patch1 -p1 -b .sockethandling
+%patch2 -p1 -b .dropprivs
 %patch3 -p1 -b .writehard
 
 %build
@@ -63,6 +63,10 @@ getent group tmux >/dev/null || groupadd -r tmux
 %attr(775,root,tmux) %{_localstatedir}/run/tmux
 
 %changelog
+* Sun Apr 10 2011 Sven Lankes <sven@lank.es> 1.4-3
+- Fix CVE-2011-1496
+- Fixes rhbz #693824
+
 * Wed Feb 09 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.4-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
 
