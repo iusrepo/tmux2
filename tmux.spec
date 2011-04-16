@@ -1,6 +1,6 @@
 Name:           tmux
 Version:        1.4
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        A terminal multiplexer
 
 Group:          Applications/System
@@ -10,6 +10,7 @@ License:        ISC and BSD
 URL:            http://sourceforge.net/projects/tmux
 Requires(pre):  shadow-utils
 Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
+Source1:        %{name}-tmpfiles.conf
 # This first patch creates MANDIR in the GNUmakefile.  This has been sent
 # upstream via email but upstream replied and said would not change.
 Patch0:         tmux-1.0-02_fix_wrong_location.diff
@@ -44,6 +45,8 @@ make %{?_smp_mflags} LDFLAGS="%{optflags}"
 
 %install
 rm -rf %{buildroot}
+mkdir -p %{buildroot}%{_sysconfdir}/tmpfiles.d
+install -m 0644 %{SOURCE1} %{buildroot}%{_sysconfdir}/tmpfiles.d/%{name}.conf
 make install DESTDIR=%{buildroot} INSTALLBIN="install -p -m 755" INSTALLMAN="install -p -m 644"
 
 # Create the socket dir
@@ -55,14 +58,25 @@ rm -rf %{buildroot}
 %pre
 getent group tmux >/dev/null || groupadd -r tmux
 
+%post
+# Make sure that /var/run/tmux is created after package install because
+# otherwise tmux would only start to work after a reboot
+mkdir /var/run/tmux
+chown root.tmux /var/run/tmux
+chmod 775 /var/run/tmux
+
 %files
 %defattr(-,root,root,-)
 %doc CHANGES FAQ NOTES TODO examples/
 %attr(2755,root,tmux) %{_bindir}/tmux
 %{_mandir}/man1/tmux.1.*
-%attr(775,root,tmux) %{_localstatedir}/run/tmux
+%ghost %{_localstatedir}/run/tmux
+%config(noreplace) %{_sysconfdir}/tmpfiles.d/%{name}.conf
 
 %changelog
+* Sat Apr 16 2011 Sven Lankes <sven@lank.es> 1.4-4
+- Add /var/run/tmp to tmpdir.d - fixes rhbz 656704 and 697134 
+
 * Sun Apr 10 2011 Sven Lankes <sven@lank.es> 1.4-3
 - Fix CVE-2011-1496
 - Fixes rhbz #693824
