@@ -1,6 +1,6 @@
 Name:           tmux
-Version:        1.4
-Release:        4%{?dist}
+Version:        1.5
+Release:        1%{?dist}
 Summary:        A terminal multiplexer
 
 Group:          Applications/System
@@ -8,19 +8,7 @@ Group:          Applications/System
 # 3 clause BSD licensed.
 License:        ISC and BSD
 URL:            http://sourceforge.net/projects/tmux
-Requires(pre):  shadow-utils
 Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
-Source1:        %{name}-tmpfiles.conf
-# This first patch creates MANDIR in the GNUmakefile.  This has been sent
-# upstream via email but upstream replied and said would not change.
-Patch0:         tmux-1.0-02_fix_wrong_location.diff
-Patch1:         tmux-1.0-03_proper_socket_handling.diff
-# 2010-03-28: Submitted upstream:
-# https://sourceforge.net/tracker/?func=detail&aid=2977950&group_id=200378&atid=973264
-Patch2:         tmux-1.0-04_dropping_unnecessary_privileges.diff
-# 2010-03-28: Submitted upstream:
-# https://sourceforge.net/tracker/?func=detail&aid=2977945&group_id=200378&atid=973264
-Patch3:         tmux-1.2-writehard.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  ncurses-devel
@@ -34,10 +22,6 @@ as GNU Screen.
 
 %prep
 %setup -q
-%patch0 -p1 -b .location
-%patch1 -p1 -b .sockethandling
-%patch2 -p1 -b .dropprivs
-%patch3 -p1 -b .writehard
 
 %build
 %configure
@@ -45,37 +29,35 @@ make %{?_smp_mflags} LDFLAGS="%{optflags}"
 
 %install
 rm -rf %{buildroot}
-mkdir -p %{buildroot}%{_sysconfdir}/tmpfiles.d
-install -m 0644 %{SOURCE1} %{buildroot}%{_sysconfdir}/tmpfiles.d/%{name}.conf
 make install DESTDIR=%{buildroot} INSTALLBIN="install -p -m 755" INSTALLMAN="install -p -m 644"
-
-# Create the socket dir
-mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/run/%{name}
 
 %clean
 rm -rf %{buildroot}
 
-%pre
-getent group tmux >/dev/null || groupadd -r tmux
-
 %post
-# Make sure that /var/run/tmux is created after package install because
-# otherwise tmux would only start to work after a reboot
-mkdir /var/run/tmux
-chown root.tmux /var/run/tmux
-chmod 775 /var/run/tmux
+if [ ! -f %{_sysconfdir}/shells ] ; then
+    echo "%{_bindir}/tmux" > %{_sysconfdir}/shells
+else
+    grep -q "^%{_bindir}/tmux$" %{_sysconfdir}/shells || echo "%{_bindir}/tmux" >> %{_sysconfdir}/shells
+fi
 
 %files
 %defattr(-,root,root,-)
 %doc CHANGES FAQ NOTES TODO examples/
-%attr(2755,root,tmux) %{_bindir}/tmux
+%{_bindir}/tmux
 %{_mandir}/man1/tmux.1.*
-%ghost %{_localstatedir}/run/tmux
-%config(noreplace) %{_sysconfdir}/tmpfiles.d/%{name}.conf
 
 %changelog
+* Tue Nov 01 2011 Sven Lankes <sven@lank.es> 1.5-1
+- New upstream release
+- Do the right thing (tm) and revert to $upstream-behaviour: 
+   No longer install tmux setgid and no longer use /var/run/tmux 
+   for sockets. Use "tmux -S /var/run/tmux/tmux-`id -u`/default attach"
+   if you need to access an "old" tmux session
+- tmux can be used as a login shell so add it to /etc/shells
+
 * Sat Apr 16 2011 Sven Lankes <sven@lank.es> 1.4-4
-- Add /var/run/tmp to tmpdir.d - fixes rhbz 656704 and 697134 
+- Add /var/run/tmp to tmpdir.d - fixes rhbz 656704 and 697134
 
 * Sun Apr 10 2011 Sven Lankes <sven@lank.es> 1.4-3
 - Fix CVE-2011-1496
