@@ -1,6 +1,6 @@
 Name:           tmux
-Version:        1.5
-Release:        2%{?dist}
+Version:        1.6
+Release:        1%{?dist}
 Summary:        A terminal multiplexer
 
 Group:          Applications/System
@@ -48,6 +48,9 @@ fi
 %{_mandir}/man1/tmux.1.*
 
 %changelog
+* Tue Jan 31 2012 Sven Lankes <sven@lank.es> 1.6-1
+- New upstream release
+
 * Sat Jan 14 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.5-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
 
