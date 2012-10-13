@@ -1,6 +1,6 @@
 Name:           tmux
-Version:        1.6
-Release:        2%{?dist}
+Version:        1.7
+Release:        1%{?dist}
 Summary:        A terminal multiplexer
 
 Group:          Applications/System
@@ -9,7 +9,6 @@ Group:          Applications/System
 License:        ISC and BSD
 URL:            http://sourceforge.net/projects/tmux
 Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  ncurses-devel
 BuildRequires:  libevent-devel
@@ -31,9 +30,6 @@ make %{?_smp_mflags} LDFLAGS="%{optflags}"
 rm -rf %{buildroot}
 make install DESTDIR=%{buildroot} INSTALLBIN="install -p -m 755" INSTALLMAN="install -p -m 644"
 
-%clean
-rm -rf %{buildroot}
-
 %post
 if [ ! -f %{_sysconfdir}/shells ] ; then
     echo "%{_bindir}/tmux" > %{_sysconfdir}/shells
@@ -48,6 +44,9 @@ fi
 %{_mandir}/man1/tmux.1.*
 
 %changelog
+* Sat Oct 13 2012 Sven Lankes <sven@lank.es> 1.7-1
+- New upstream release
+
 * Sat Jul 21 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.6-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
 
