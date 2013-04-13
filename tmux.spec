@@ -1,6 +1,6 @@
 Name:           tmux
-Version:        1.7
-Release:        2%{?dist}
+Version:        1.8
+Release:        1%{?dist}
 Summary:        A terminal multiplexer
 
 Group:          Applications/System
@@ -39,11 +39,14 @@ fi
 
 %files
 %defattr(-,root,root,-)
-%doc CHANGES FAQ NOTES TODO examples/
+%doc CHANGES FAQ TODO examples/
 %{_bindir}/tmux
 %{_mandir}/man1/tmux.1.*
 
 %changelog
+* Sat Apr 13 2013 Sven Lankes <sven@lank.es> 1.8-1
+- New upstream release
+
 * Fri Feb 15 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.7-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
 
