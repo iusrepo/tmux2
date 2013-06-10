@@ -1,6 +1,6 @@
 Name:           tmux
 Version:        1.8
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A terminal multiplexer
 
 Group:          Applications/System
@@ -37,6 +37,11 @@ else
     grep -q "^%{_bindir}/tmux$" %{_sysconfdir}/shells || echo "%{_bindir}/tmux" >> %{_sysconfdir}/shells
 fi
 
+%postun
+if [ $1 -eq 0 ] && [ -f %{_sysconfdir}/shells ]; then
+    sed -i '\!^%{_bindir}/tmux$!d' %{_sysconfdir}/shells
+fi
+
 %files
 %defattr(-,root,root,-)
 %doc CHANGES FAQ TODO examples/
@@ -44,6 +49,9 @@ fi
 %{_mandir}/man1/tmux.1.*
 
 %changelog
+* Mon Jun 10 2013 Petr Šabata <contyk@redhat.com> - 1.8-2
+- Remove tmux from the shells file upon package removal (#972633)
+
 * Sat Apr 13 2013 Sven Lankes <sven@lank.es> 1.8-1
 - New upstream release
 
