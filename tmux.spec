@@ -1,6 +1,6 @@
 Name:           tmux
 Version:        1.8
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        A terminal multiplexer
 
 Group:          Applications/System
@@ -49,6 +49,9 @@ fi
 %{_mandir}/man1/tmux.1.*
 
 %changelog
+* Sun Aug 04 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.8-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
+
 * Mon Jun 10 2013 Petr Šabata <contyk@redhat.com> - 1.8-2
 - Remove tmux from the shells file upon package removal (#972633)
 
