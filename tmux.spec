@@ -1,6 +1,6 @@
 Name:           tmux
-Version:        1.8
-Release:        3%{?dist}
+Version:        1.9
+Release:        1%{?dist}
 Summary:        A terminal multiplexer
 
 Group:          Applications/System
@@ -31,15 +31,20 @@ rm -rf %{buildroot}
 make install DESTDIR=%{buildroot} INSTALLBIN="install -p -m 755" INSTALLMAN="install -p -m 644"
 
 %post
-if [ ! -f %{_sysconfdir}/shells ] ; then
+if [ "$1" = 1 ]; then
+  if [ ! -f %{_sysconfdir}/shells ] ; then
     echo "%{_bindir}/tmux" > %{_sysconfdir}/shells
-else
+    echo "/bin/tmux" >> %{_sysconfdir}/shells
+  else
     grep -q "^%{_bindir}/tmux$" %{_sysconfdir}/shells || echo "%{_bindir}/tmux" >> %{_sysconfdir}/shells
+    grep -q "^/bin/tmux$" %{_sysconfdir}/shells || echo "/bin/tmux" >> %{_sysconfdir}/shells
+  fi
 fi
 
 %postun
-if [ $1 -eq 0 ] && [ -f %{_sysconfdir}/shells ]; then
-    sed -i '\!^%{_bindir}/tmux$!d' %{_sysconfdir}/shells
+if [ "$1" = 0 ] && [ -f %{_sysconfdir}/shells ] ; then
+  sed -i '\!^%{_bindir}/tmux$!d' %{_sysconfdir}/shells
+  sed -i '\!^/bin/tmux$!d' %{_sysconfdir}/shells
 fi
 
 %files
@@ -49,6 +54,10 @@ fi
 %{_mandir}/man1/tmux.1.*
 
 %changelog
+* Sat Feb 22 2014 Filipe Rosset <rosset.filipe@gmail.com> 1.9-1
+- New upstream release 1.9
+- Fix rhbz #1067860
+
 * Sun Aug 04 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.8-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
 
