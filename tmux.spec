@@ -1,5 +1,5 @@
 Name:           tmux
-Version:        1.9
+Version:        1.9a
 Release:        1%{?dist}
 Summary:        A terminal multiplexer
 
@@ -54,6 +54,9 @@ fi
 %{_mandir}/man1/tmux.1.*
 
 %changelog
+* Sun Feb 23 2014 Filipe Rosset <rosset.filipe@gmail.com> 1.9a-1
+- New upstream release 1.9a
+
 * Sat Feb 22 2014 Filipe Rosset <rosset.filipe@gmail.com> 1.9-1
 - New upstream release 1.9
 - Fix rhbz #1067860
