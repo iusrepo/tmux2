@@ -1,6 +1,6 @@
 Name:           tmux
 Version:        1.9a
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A terminal multiplexer
 
 Group:          Applications/System
@@ -9,6 +9,7 @@ Group:          Applications/System
 License:        ISC and BSD
 URL:            http://sourceforge.net/projects/tmux
 Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
+Patch0:         tmux-fix-malloc-check-error.patch
 
 BuildRequires:  ncurses-devel
 BuildRequires:  libevent-devel
@@ -21,6 +22,7 @@ as GNU Screen.
 
 %prep
 %setup -q
+%patch0 -p0
 
 %build
 %configure
@@ -54,6 +56,9 @@ fi
 %{_mandir}/man1/tmux.1.*
 
 %changelog
+* Wed Feb 26 2014 Filipe Rosset <rosset.filipe@gmail.com> 1.9a-2
+- Fix rhbz #1069950, upstream [tmux:tickets] #105
+
 * Sun Feb 23 2014 Filipe Rosset <rosset.filipe@gmail.com> 1.9a-1
 - New upstream release 1.9a
 
