@@ -1,6 +1,6 @@
 Name:           tmux
 Version:        1.9a
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        A terminal multiplexer
 
 Group:          Applications/System
@@ -56,6 +56,9 @@ fi
 %{_mandir}/man1/tmux.1.*
 
 %changelog
+* Sun Jun 08 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.9a-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
+
 * Wed Feb 26 2014 Filipe Rosset <rosset.filipe@gmail.com> 1.9a-2
 - Fix rhbz #1069950, upstream [tmux:tickets] #105
 
