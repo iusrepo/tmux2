@@ -1,6 +1,6 @@
 Name:           tmux
 Version:        1.9a
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        A terminal multiplexer
 
 Group:          Applications/System
@@ -10,6 +10,7 @@ License:        ISC and BSD
 URL:            http://sourceforge.net/projects/tmux
 Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 Patch0:         tmux-fix-malloc-check-error.patch
+Patch1:         tmux-fix-f-keys-2056a9ef9e.patch
 
 BuildRequires:  ncurses-devel
 BuildRequires:  libevent-devel
@@ -23,6 +24,7 @@ as GNU Screen.
 %prep
 %setup -q
 %patch0 -p0
+%patch1 -p1
 
 %build
 %configure
@@ -56,6 +58,9 @@ fi
 %{_mandir}/man1/tmux.1.*
 
 %changelog
+* Fri Jan 02 2015 Sven Lankes <sven@lank.es> - 1.9a-5
+- Pull in upstream commit to fix Fx-Key issues. rhbz #1177652
+
 * Mon Aug 18 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.9a-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
 
