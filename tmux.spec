@@ -1,6 +1,6 @@
 Name:           tmux
-Version:        1.9a
-Release:        5%{?dist}
+Version:        2.0
+Release:        1%{?dist}
 Summary:        A terminal multiplexer
 
 Group:          Applications/System
@@ -9,8 +9,6 @@ Group:          Applications/System
 License:        ISC and BSD
 URL:            http://sourceforge.net/projects/tmux
 Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
-Patch0:         tmux-fix-malloc-check-error.patch
-Patch1:         tmux-fix-f-keys-2056a9ef9e.patch
 
 BuildRequires:  ncurses-devel
 BuildRequires:  libevent-devel
@@ -23,15 +21,12 @@ as GNU Screen.
 
 %prep
 %setup -q
-%patch0 -p0
-%patch1 -p1
 
 %build
 %configure
 make %{?_smp_mflags} LDFLAGS="%{optflags}"
 
 %install
-rm -rf %{buildroot}
 make install DESTDIR=%{buildroot} INSTALLBIN="install -p -m 755" INSTALLMAN="install -p -m 644"
 
 %post
@@ -52,12 +47,14 @@ if [ "$1" = 0 ] && [ -f %{_sysconfdir}/shells ] ; then
 fi
 
 %files
-%defattr(-,root,root,-)
 %doc CHANGES FAQ TODO examples/
 %{_bindir}/tmux
 %{_mandir}/man1/tmux.1.*
 
 %changelog
+* Thu May 07 2015 Filipe Rosset <rosset.filipe@gmail.com> - 2.0-1
+- Rebuilt for new upstream version 2.0, fixes rhbz #1219300
+
 * Fri Jan 02 2015 Sven Lankes <sven@lank.es> - 1.9a-5
 - Pull in upstream commit to fix Fx-Key issues. rhbz #1177652
 
