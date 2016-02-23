@@ -1,6 +1,6 @@
 Name:           tmux
 Version:        2.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        A terminal multiplexer
 
 Group:          Applications/System
@@ -29,8 +29,7 @@ make %{?_smp_mflags} LDFLAGS="%{optflags}"
 %install
 make install DESTDIR=%{buildroot} INSTALLBIN="install -p -m 755" INSTALLMAN="install -p -m 644"
 # bash completion
-mkdir -p %{buildroot}/%{_sysconfdir}/bash_completion.d
-install -pm 644 examples/bash_completion_tmux.sh %{buildroot}/%{_sysconfdir}/bash_completion.d/
+install -Dpm 644 examples/bash_completion_tmux.sh %{buildroot}%{_datadir}/bash-completion/completions/tmux
 
 %post
 if [ "$1" = 1 ]; then
@@ -53,9 +52,12 @@ fi
 %doc CHANGES FAQ TODO examples/
 %{_bindir}/tmux
 %{_mandir}/man1/tmux.1.*
-%{_sysconfdir}/bash_completion.d
+%{_datadir}/bash-completion/completions/tmux
 
 %changelog
+* Tue Feb 23 2016 Sven Lankes <sven@lank.es> - 2.1-3
+- use more correct bash completion path (thanks to Carl George)
+
 * Mon Feb 22 2016 Sven Lankes <sven@lank.es> - 2.1-2
 - add upstream bash-completion (thanks to Scott Tsai - closes rhbz #1148183)
 
