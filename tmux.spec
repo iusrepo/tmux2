@@ -1,6 +1,6 @@
 Name:           tmux
-Version:        2.1
-Release:        3%{?dist}
+Version:        2.2
+Release:        1%{?dist}
 Summary:        A terminal multiplexer
 
 Group:          Applications/System
@@ -9,6 +9,8 @@ Group:          Applications/System
 License:        ISC and BSD
 URL:            http://sourceforge.net/projects/tmux
 Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
+# Examples has been removed - so include the bash_completion here
+Source1:        bash_completion_tmux.sh
 
 BuildRequires:  ncurses-devel
 BuildRequires:  libevent-devel
@@ -29,7 +31,7 @@ make %{?_smp_mflags} LDFLAGS="%{optflags}"
 %install
 make install DESTDIR=%{buildroot} INSTALLBIN="install -p -m 755" INSTALLMAN="install -p -m 644"
 # bash completion
-install -Dpm 644 examples/bash_completion_tmux.sh %{buildroot}%{_datadir}/bash-completion/completions/tmux
+install -Dpm 644 %{SOURCE1} %{buildroot}%{_datadir}/bash-completion/completions/tmux
 
 %post
 if [ "$1" = 1 ]; then
@@ -49,12 +51,15 @@ if [ "$1" = 0 ] && [ -f %{_sysconfdir}/shells ] ; then
 fi
 
 %files
-%doc CHANGES FAQ TODO examples/
+%doc CHANGES FAQ TODO 
 %{_bindir}/tmux
 %{_mandir}/man1/tmux.1.*
 %{_datadir}/bash-completion/completions/tmux
 
 %changelog
+* Wed Apr 20 2016 Sven Lankes <sven@lank.es> - 2.2-1
+- New upstream release
+
 * Tue Feb 23 2016 Sven Lankes <sven@lank.es> - 2.1-3
 - use more correct bash completion path (thanks to Carl George)
 
