@@ -1,14 +1,15 @@
 Name:           tmux
 Version:        2.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A terminal multiplexer
 
 Group:          Applications/System
 # Most of the source is ISC licensed; some of the files in compat/ are 2 and
 # 3 clause BSD licensed.
 License:        ISC and BSD
-URL:            http://sourceforge.net/projects/tmux
-Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
+URL:            https://tmux.github.io/
+Source0:        https://github.com/tmux/%{name}/releases/download/%{version}/%{name}-%{version}.tar.gz
+
 # Examples has been removed - so include the bash_completion here
 Source1:        bash_completion_tmux.sh
 
@@ -57,6 +58,9 @@ fi
 %{_datadir}/bash-completion/completions/tmux
 
 %changelog
+* Mon May 09 2016 Sven Lankes <sven@lank.es> - 2.2-2
+- Adapt source0 and url for new website (fixes rhbz #1334255)
+
 * Wed Apr 20 2016 Sven Lankes <sven@lank.es> - 2.2-1
 - New upstream release
 
