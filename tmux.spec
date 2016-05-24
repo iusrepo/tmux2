@@ -1,6 +1,6 @@
 Name:           tmux
 Version:        2.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        A terminal multiplexer
 
 Group:          Applications/System
@@ -15,6 +15,7 @@ Source1:        bash_completion_tmux.sh
 
 BuildRequires:  ncurses-devel
 BuildRequires:  libevent-devel
+BuildRequires:  libutempter-devel
 
 %description
 tmux is a "terminal multiplexer."  It enables a number of terminals (or
@@ -58,6 +59,10 @@ fi
 %{_datadir}/bash-completion/completions/tmux
 
 %changelog
+* Tue May 24 2016 Sven Lankes <sven@lank.es> - 2.2-3
+- add libutempter-devel as buildrequires to allow writing to utmp
+- fixes rhbz #1338936 
+
 * Mon May 09 2016 Sven Lankes <sven@lank.es> - 2.2-2
 - Adapt source0 and url for new website (fixes rhbz #1334255)
 
