@@ -1,6 +1,6 @@
 Name:           tmux
-Version:        2.2
-Release:        3%{?dist}
+Version:        2.3
+Release:        1%{?dist}
 Summary:        A terminal multiplexer
 
 Group:          Applications/System
@@ -38,18 +38,20 @@ install -Dpm 644 %{SOURCE1} %{buildroot}%{_datadir}/bash-completion/completions/
 %post
 if [ "$1" = 1 ]; then
   if [ ! -f %{_sysconfdir}/shells ] ; then
-    echo "%{_bindir}/tmux" > %{_sysconfdir}/shells
-    echo "/bin/tmux" >> %{_sysconfdir}/shells
-  else
-    grep -q "^%{_bindir}/tmux$" %{_sysconfdir}/shells || echo "%{_bindir}/tmux" >> %{_sysconfdir}/shells
-    grep -q "^/bin/tmux$" %{_sysconfdir}/shells || echo "/bin/tmux" >> %{_sysconfdir}/shells
+    touch %{_sysconfdir}/shells
   fi
+  for binpath in %{_bindir} /bin; do
+    if ! grep -q "^${binpath}/tmux$" %{_sysconfdir}/shells; then
+       (cat %{_sysconfdir}/shells; echo "$binpath/tmux") > %{_sysconfdir}/shells.new
+       mv %{_sysconfdir}/shells{.new,}
+    fi
+  done
 fi
 
 %postun
 if [ "$1" = 0 ] && [ -f %{_sysconfdir}/shells ] ; then
-  sed -i '\!^%{_bindir}/tmux$!d' %{_sysconfdir}/shells
-  sed -i '\!^/bin/tmux$!d' %{_sysconfdir}/shells
+  sed -e '\!^%{_bindir}/tmux$!d' -e '\!^/bin/tmux$!d' < %{_sysconfdir}/shells > %{_sysconfdir}/shells.new
+  mv %{_sysconfdir}/shells{.new,}
 fi
 
 %files
@@ -59,6 +61,10 @@ fi
 %{_datadir}/bash-completion/completions/tmux
 
 %changelog
+* Fri Oct 28 2016 Sven Lankes <sven@lank.es> - 2.3-1
+- New upstream release - fixes rhbz #1380562
+- Adapt shells handling to be atomic and support rpm-ostree - fixes rhbz #1367587
+
 * Tue May 24 2016 Sven Lankes <sven@lank.es> - 2.2-3
 - add libutempter-devel as buildrequires to allow writing to utmp
 - fixes rhbz #1338936 
