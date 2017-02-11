@@ -1,6 +1,6 @@
 Name:           tmux
 Version:        2.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A terminal multiplexer
 
 Group:          Applications/System
@@ -61,6 +61,9 @@ fi
 %{_datadir}/bash-completion/completions/tmux
 
 %changelog
+* Sat Feb 11 2017 Fedora Release Engineering <releng@fedoraproject.org> - 2.3-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
+
 * Fri Oct 28 2016 Sven Lankes <sven@lank.es> - 2.3-1
 - New upstream release - fixes rhbz #1380562
 - Adapt shells handling to be atomic and support rpm-ostree - fixes rhbz #1367587
