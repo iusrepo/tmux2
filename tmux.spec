@@ -1,6 +1,6 @@
 Name:           tmux
 Version:        2.4
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A terminal multiplexer
 
 Group:          Applications/System
@@ -27,8 +27,13 @@ as GNU Screen.
 %setup -q
 
 %build
+CFLAGS="$RPM_OPT_FLAGS -fPIC -pie -Wl,-z,relro -Wl,-z,now"
+CXXFLAGS="$RPM_OPT_FLAGS -fPIC -pie -Wl,-z,relro -Wl,-z,now"
+export CFLAGS
+export CXXFLAGS
 %configure
 make %{?_smp_mflags} LDFLAGS="%{optflags}"
+
 
 %install
 make install DESTDIR=%{buildroot} INSTALLBIN="install -p -m 755" INSTALLMAN="install -p -m 644"
@@ -61,6 +66,9 @@ fi
 %{_datadir}/bash-completion/completions/tmux
 
 %changelog
+* Fri Apr 21 2017 Filipe Rosset <rosset.filipe@gmail.com> - 2.4-2
+- rebuild tmux as PIE  - fixes rhbz #1324104
+
 * Fri Apr 21 2017 Filipe Rosset <rosset.filipe@gmail.com> - 2.4-1
 - New upstream release - fixes rhbz #1444011
 
