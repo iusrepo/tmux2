@@ -10,7 +10,7 @@ Source0:        https://github.com/tmux/tmux/releases/download/%{version}/tmux-%
 Source1:        bash_completion_tmux.sh
 
 BuildRequires:  ncurses-devel
-BuildRequires:  libevent-devel
+BuildRequires:  pkgconfig(libevent) > 2
 BuildRequires:  libutempter-devel
 
 Provides: tmux = %{version}-%{release}
@@ -74,6 +74,7 @@ fi
 %changelog
 * Thu May 04 2017 Carl George <carl.george@rackspace.com> - 2.4-1.ius
 - Port from Fedora to IUS
+- Set minimum libevent version to 2 per upstream (uses libevent2 on EL6)
 
 * Fri Apr 21 2017 Filipe Rosset <rosset.filipe@gmail.com> - 2.4-2
 - rebuild tmux as PIE  - fixes rhbz #1324104
