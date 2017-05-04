@@ -1,21 +1,22 @@
-Name:           tmux
+Name:           tmux2u
 Version:        2.4
-Release:        2%{?dist}
+Release:        1.ius%{?dist}
 Summary:        A terminal multiplexer
-
-Group:          Applications/System
 # Most of the source is ISC licensed; some of the files in compat/ are 2 and
 # 3 clause BSD licensed.
 License:        ISC and BSD
 URL:            https://tmux.github.io/
-Source0:        https://github.com/tmux/%{name}/releases/download/%{version}/%{name}-%{version}.tar.gz
-
-# Examples has been removed - so include the bash_completion here
+Source0:        https://github.com/tmux/tmux/releases/download/%{version}/tmux-%{version}.tar.gz
 Source1:        bash_completion_tmux.sh
 
 BuildRequires:  ncurses-devel
 BuildRequires:  libevent-devel
 BuildRequires:  libutempter-devel
+
+Provides: tmux = %{version}-%{release}
+Provides: tmux%{?_isa} = %{version}-%{release}
+Conflicts: tmux < %{version}-%{release}
+
 
 %description
 tmux is a "terminal multiplexer."  It enables a number of terminals (or
@@ -23,8 +24,10 @@ windows) to be accessed and controlled from a single terminal.  tmux is
 intended to be a simple, modern, BSD-licensed alternative to programs such
 as GNU Screen.
 
+
 %prep
-%setup -q
+%setup -q -n tmux-%{version}
+
 
 %build
 CFLAGS="$RPM_OPT_FLAGS -fPIC -pie -Wl,-z,relro -Wl,-z,now"
@@ -40,6 +43,7 @@ make install DESTDIR=%{buildroot} INSTALLBIN="install -p -m 755" INSTALLMAN="ins
 # bash completion
 install -Dpm 644 %{SOURCE1} %{buildroot}%{_datadir}/bash-completion/completions/tmux
 
+
 %post
 if [ "$1" = 1 ]; then
   if [ ! -f %{_sysconfdir}/shells ] ; then
@@ -53,11 +57,13 @@ if [ "$1" = 1 ]; then
   done
 fi
 
+
 %postun
 if [ "$1" = 0 ] && [ -f %{_sysconfdir}/shells ] ; then
   sed -e '\!^%{_bindir}/tmux$!d' -e '\!^/bin/tmux$!d' < %{_sysconfdir}/shells > %{_sysconfdir}/shells.new
   mv %{_sysconfdir}/shells{.new,}
 fi
+
 
 %files
 %doc CHANGES FAQ TODO 
@@ -66,6 +72,9 @@ fi
 %{_datadir}/bash-completion/completions/tmux
 
 %changelog
+* Thu May 04 2017 Carl George <carl.george@rackspace.com> - 2.4-1.ius
+- Port from Fedora to IUS
+
 * Fri Apr 21 2017 Filipe Rosset <rosset.filipe@gmail.com> - 2.4-2
 - rebuild tmux as PIE  - fixes rhbz #1324104
 
