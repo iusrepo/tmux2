@@ -40,8 +40,11 @@ make %{?_smp_mflags} LDFLAGS="%{optflags}"
 
 %install
 make install DESTDIR=%{buildroot} INSTALLBIN="install -p -m 755" INSTALLMAN="install -p -m 644"
-# bash completion
+%if 0%{?rhel} && 0%{?rhel} < 7
+install -Dpm 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/bash_completion.d/tmux
+%else
 install -Dpm 644 %{SOURCE1} %{buildroot}%{_datadir}/bash-completion/completions/tmux
+%endif
 
 
 %post
@@ -69,12 +72,21 @@ fi
 %doc CHANGES FAQ TODO 
 %{_bindir}/tmux
 %{_mandir}/man1/tmux.1.*
+%if 0%{?rhel} && 0%{?rhel} < 7
+%dir %{_sysconfdir}/bash_completion.d
+%{_sysconfdir}/bash_completion.d/tmux
+%else
+%dir %{_datadir}/bash-completion
+%dir %{_datadir}/bash-completion/completions
 %{_datadir}/bash-completion/completions/tmux
+%endif
+
 
 %changelog
 * Thu May 04 2017 Carl George <carl.george@rackspace.com> - 2.4-1.ius
 - Port from Fedora to IUS
 - Set minimum libevent version to 2 per upstream (uses libevent2 on EL6)
+- Fix bash completion
 
 * Fri Apr 21 2017 Filipe Rosset <rosset.filipe@gmail.com> - 2.4-2
 - rebuild tmux as PIE  - fixes rhbz #1324104
