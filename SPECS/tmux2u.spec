@@ -1,5 +1,5 @@
 Name:           tmux2u
-Version:        2.4
+Version:        2.5
 Release:        1.ius%{?dist}
 Summary:        A terminal multiplexer
 # Most of the source is ISC licensed; some of the files in compat/ are 2 and
@@ -83,6 +83,9 @@ fi
 
 
 %changelog
+* Tue May 30 2017 Ben Harper <ben.harper@rackspace.com> - 2.5-1.ius
+- Latest upstream
+
 * Thu May 04 2017 Carl George <carl.george@rackspace.com> - 2.4-1.ius
 - Port from Fedora to IUS
 - Set minimum libevent version to 2 per upstream (uses libevent2 on EL6)
