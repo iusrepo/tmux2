@@ -83,7 +83,7 @@ fi
 
 
 %changelog
-* Thu Apr 26 2018 Jessica Widener <jessica.widener@rackspace.com>
+* Thu Apr 26 2018 Jessica Widener <jessica.widener@rackspace.com> - 2.7-1.iuss
 - Latest upstream
 
 * Thu Oct 05 2017 Ben Harper <ben.harper@rackspace.com> - 2.6-1.ius
