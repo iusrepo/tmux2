@@ -1,5 +1,5 @@
 Name:           tmux2u
-Version:        2.6
+Version:        2.7
 Release:        1.ius%{?dist}
 Summary:        A terminal multiplexer
 # Most of the source is ISC licensed; some of the files in compat/ are 2 and
@@ -83,6 +83,9 @@ fi
 
 
 %changelog
+* Thu Apr 26 2018 Jessica Widener <jessica.widener@rackspace.com>
+- Latest upstream
+
 * Thu Oct 05 2017 Ben Harper <ben.harper@rackspace.com> - 2.6-1.ius
 - Latest upstream
 - removed FAQ moved to https://github.com/tmux/tmux/wiki/FAQ
