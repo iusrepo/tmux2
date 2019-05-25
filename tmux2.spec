@@ -1,8 +1,8 @@
 %global _hardened_build 1
 
-Name:           tmux2u
+Name:           tmux2
 Version:        2.9a
-Release:        1.ius%{?dist}
+Release:        2%{?dist}
 Summary:        A terminal multiplexer
 
 # Most of the source is ISC licensed; some of the files in compat/ are 2 and
@@ -17,6 +17,10 @@ BuildRequires:  gcc
 BuildRequires:  ncurses-devel
 BuildRequires:  pkgconfig(libevent) > 2
 BuildRequires:  libutempter-devel
+
+# rename from tmux2u
+Obsoletes:      tmux2u < 2.9a-2
+Provides:       tmux2u = %{version}-%{release}
 
 # safe replacement
 Provides:       tmux = %{version}-%{release}
@@ -79,6 +83,9 @@ fi
 %endif
 
 %changelog
+* Sat May 25 2019 Carl George <carl@george.computer> - 2.9a-2
+- Rename from tmux2u to tmux2
+
 * Thu May 23 2019 Filipe Rosset <rosset.filipe@gmail.com> - 2.9a-1.ius
 - update to version 2.9a
 
