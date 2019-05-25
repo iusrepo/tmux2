@@ -14,8 +14,10 @@ Source0:        https://github.com/tmux/tmux/releases/download/%{version}/tmux-%
 Source1:        bash_completion_tmux.sh
 
 BuildRequires:  gcc
-BuildRequires:  ncurses-devel
 BuildRequires:  pkgconfig(libevent) > 2
+BuildRequires:  pkgconfig(tinfo)
+BuildRequires:  pkgconfig(ncurses)
+BuildRequires:  pkgconfig(ncursesw)
 BuildRequires:  libutempter-devel
 
 # rename from tmux2u
