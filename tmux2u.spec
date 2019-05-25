@@ -1,22 +1,27 @@
+%global _hardened_build 1
+
 Name:           tmux2u
 Version:        2.9a
 Release:        1.ius%{?dist}
 Summary:        A terminal multiplexer
+
 # Most of the source is ISC licensed; some of the files in compat/ are 2 and
 # 3 clause BSD licensed.
 License:        ISC and BSD
 URL:            https://tmux.github.io/
 Source0:        https://github.com/tmux/tmux/releases/download/%{version}/tmux-%{version}.tar.gz
+# Examples has been removed - so include the bash_completion here
 Source1:        bash_completion_tmux.sh
 
+BuildRequires:  gcc
 BuildRequires:  ncurses-devel
 BuildRequires:  pkgconfig(libevent) > 2
 BuildRequires:  libutempter-devel
 
-Provides: tmux = %{version}-%{release}
-Provides: tmux%{?_isa} = %{version}-%{release}
-Conflicts: tmux < %{version}-%{release}
-
+# safe replacement
+Provides:       tmux = %{version}-%{release}
+Provides:       tmux%{?_isa} = %{version}-%{release}
+Conflicts:      tmux < %{version}-%{release}
 
 %description
 tmux is a "terminal multiplexer."  It enables a number of terminals (or
@@ -24,28 +29,22 @@ windows) to be accessed and controlled from a single terminal.  tmux is
 intended to be a simple, modern, BSD-licensed alternative to programs such
 as GNU Screen.
 
-
 %prep
 %setup -q -n tmux-%{version}
 
-
 %build
-CFLAGS="$RPM_OPT_FLAGS -fPIC -pie -Wl,-z,relro -Wl,-z,now"
-CXXFLAGS="$RPM_OPT_FLAGS -fPIC -pie -Wl,-z,relro -Wl,-z,now"
-export CFLAGS
-export CXXFLAGS
 %configure
-make %{?_smp_mflags} LDFLAGS="%{optflags}"
+%make_build
 
 
 %install
-make install DESTDIR=%{buildroot} INSTALLBIN="install -p -m 755" INSTALLMAN="install -p -m 644"
+%make_install
+# bash completion
 %if 0%{?rhel} && 0%{?rhel} < 7
 install -Dpm 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/bash_completion.d/tmux
 %else
 install -Dpm 644 %{SOURCE1} %{buildroot}%{_datadir}/bash-completion/completions/tmux
 %endif
-
 
 %post
 if [ "$1" = 1 ]; then
@@ -60,13 +59,11 @@ if [ "$1" = 1 ]; then
   done
 fi
 
-
 %postun
 if [ "$1" = 0 ] && [ -f %{_sysconfdir}/shells ] ; then
   sed -e '\!^%{_bindir}/tmux$!d' -e '\!^/bin/tmux$!d' < %{_sysconfdir}/shells > %{_sysconfdir}/shells.new
   mv %{_sysconfdir}/shells{.new,}
 fi
-
 
 %files
 %doc CHANGES TODO
@@ -80,7 +77,6 @@ fi
 %dir %{_datadir}/bash-completion/completions
 %{_datadir}/bash-completion/completions/tmux
 %endif
-
 
 %changelog
 * Thu May 23 2019 Filipe Rosset <rosset.filipe@gmail.com> - 2.9a-1.ius
